@@ -18,8 +18,9 @@ public class JpaMain
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try{
-            //insert(em);
-            pagings(em);
+            insert(em);
+            //pagings(em);
+            join(em);
             tx.commit();
         }
         catch(Exception e)
@@ -37,11 +38,11 @@ public class JpaMain
     public static void insert(EntityManager em)
     {
         Team teamA = Team.builder()
-                .name("TeamA")
+                .name("member90")
                 .build();
         em.persist(teamA);
 
-        for ( int i=0; i<1000; i++)
+        for ( int i=0; i<100; i++)
         {
             Member memberA = Member.builder()
                     .username("member" + i)
@@ -71,7 +72,25 @@ public class JpaMain
             System.out.println("[page] = " + page);
             System.out.println("page.firstItem.get(0).getUsername() = " + list.get(0).getUsername());
         }
+    }
+
+    public static void join(EntityManager em)
+    {
+        em.flush();
+        em.clear();
+
+        // inner join
+        String qlString = " select m from Member m inner join Team t on m.username = t.name";
+        TypedQuery<Member> query = em.createQuery(qlString, Member.class);
+        List<Member> members = query
+                                .getResultList();
+
+        System.out.println("members = " + members.size());
+
 
 
     }
+
+
+
 }

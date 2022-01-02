@@ -23,7 +23,7 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test" />
             <property name="javax.persistence.jdbc.user" value="sa" />
             <property name="javax.persistence.jdbc.password" value="" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true" />
@@ -32,7 +32,7 @@
 
             <!-- [튜닝] 10개 쿼리문 모았다가 한 번에 보냄 -->
             <property name="hibernate.jdbc.batch_size" value="10"/>
-            <property name="hibernate.hbm2ddl.auto" value="none" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
 
     </persistence-unit>

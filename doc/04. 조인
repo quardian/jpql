@@ -6,3 +6,40 @@
     - setFirstResult ( int startPosition )  : 조회 시작 위치 ( 0 부터 시작 )
     - setMaxResult ( int maxResult )        : 조회할 데이터
 
+---------------------------------------
+   서브 쿼리
+---------------------------------------
+    - 나이가 평균 보다 많은 회원
+        select
+            m
+        from Member m
+        where m.age > (select avg(m2.age) from Member m2)
+
+    - 한 건이라도 주문한 고객
+        select
+            m
+        from Member m
+        where ( select count(o) from Order o where m = o.member ) > 0
+
+---------------------------------------
+   서브 쿼리 지원 함수
+---------------------------------------
+    - [NOT] EXISTS (subquery) : 서브쿼리에 결과가 존재하면 참
+        . { ALL | ANY | SOME } ( subquery )
+        . ALL 모두 만족하면 참
+        . ANY, SOME : 같은 의미, 조건을 하나라도 만족하면 참
+    - [NOT] IN (subquery) : 서브쿼리의 결과 중 하나라도 같은 것이 있으면 참.
+
+    예제)
+    - 팀 A 소속인 회원
+        select m from Member m
+        where exists ( select t from m.team t where t.name = 'teamA' )
+
+    - 전체 상품 각각의 재고보다 주문량이 많은 주문들
+        select o from Order o
+        where o.orderAmount > ALL ( select p.stockAmount from Product p )
+
+    - 어떤 팀 이든 팀에 소속된 회원
+        select m from Member m
+        where m.team = ANY ( select t from Team t)
+

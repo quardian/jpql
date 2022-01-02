@@ -1,0 +1,59 @@
+---------------------------------------
+JPQL 문법
+---------------------------------------
+    - select m from Member as m where m.age > 18
+    - 엔터티 속성은 대소문자 구분 함 ( Member, age )
+    - JPQL 키워드는 대소문자 구분 안함 ( SELECT, FROM , WHERE )
+    - 엔터티 이름 사용, 테이블 이름이 아님(Member)
+    - 별칭은 필수(m) ( as는 생략 가능 )
+
+---------------------------------------
+집합과 정렬
+---------------------------------------
+    select
+        COUNT(m),   // 회원수
+        SUM(m.age), // 나이 합
+        AVG(m.age), // 평균 나이
+        MAX(m.age), // 최대 나이
+        MIN(m.age), // 최소 나이
+    from Member as m
+
+    - GROUP BY, HAVING
+    - ORDER BY
+
+---------------------------------------
+TypedQuery, Query
+---------------------------------------
+    - TypedQuery : 반환 타입이 명확할 때 사용
+        TypedQuery<Member> query = em.createQuery("select m from Member m", Member.class);
+    - Query     : 반환 타입이 명확하지 않을 때 사용
+        Query query = em.createQuery("select m.username, m.age from Member m");
+
+
+---------------------------------------
+결과조회 API
+---------------------------------------
+    - query.getReulstList()
+        . 결과가 하나 이상일 때, 리스트 반환
+        . 결과가 없으면 빈 리스트 반환 ( null point exception 걱정 안함 )
+
+    - query.getSingleResult()
+        . 결과가 정확히 하나 객체 반환
+        . 결과가 없으면 : javax.persistence.NoResultException 발생
+        . 둘 이상 이면  : javax.persistenct.NonUniqueResultException 발생
+
+        ** Spring Data JPA 에서는 데이터 없는경우도, Optional로 반환함.
+
+
+---------------------------------------
+파라미터 바인딩 - 이름 기준, 위치 기준
+---------------------------------------
+    - 이름 기준으로 사용 권장
+
+    1) 이름 기준
+    select m from Member as m where m.username=:username
+    query.setParameter("username", usernameParam);
+
+    2) 위치 기준
+    select m from Member as m where m.username=?1
+        query.setParameter(1, usernameParam);

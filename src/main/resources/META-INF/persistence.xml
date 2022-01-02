@@ -1,0 +1,40 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="h2Db"
+                      transaction-type="RESOURCE_LOCAL">
+        <description>
+            Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
+        </description>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- 클래스 정의 -->
+        <!--
+        <class>com.inho.jpabasic.entities.MemberModel</class>
+        -->
+        <class>com.inho.entities.Team</class>
+        <class>com.inho.entities.Member</class>
+        <class>com.inho.entities.Product</class>
+        <class>com.inho.entities.Order</class>
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test" />
+            <property name="javax.persistence.jdbc.user" value="sa" />
+            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+
+            <!-- [튜닝] 10개 쿼리문 모았다가 한 번에 보냄 -->
+            <property name="hibernate.jdbc.batch_size" value="10"/>
+            <property name="hibernate.hbm2ddl.auto" value="none" />
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

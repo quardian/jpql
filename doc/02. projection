@@ -1,0 +1,35 @@
+---------------------------------------
+   프로젝션
+---------------------------------------
+    - SELECT 절에 조회할 대상을 지정하는 것
+
+    - 프로젝션 대상 : 엔터티, 임베디드 타입, 스칼라 타입(숫자, 문자등 기본 데이터 타입)
+        - select m from Member m
+            : entity type projection (영속성 관리 됨)
+
+        - select m.team from Member m (영속성 관리 됨)
+            : entity type projection
+
+        - select m.address from Member m (영속성 관리 안됨)
+            : embedded type projection
+
+        - select m.username, m.age from Member m (영속성 관리 안됨)
+            : scalar type projection
+
+    - distinct 로 중복 제거
+
+---------------------------------------
+   프로젝션 - 여러 값 조회 (영속성 관리 안됨)
+---------------------------------------
+    - select m.username, m.age from Member m
+        1. Query 타입으로 조회
+        2. Object[] 타입으로 조회
+        3. new 명령어로 조회
+            . 단순 값을 DTO로 바로 조회
+            . SELECT
+                new com.inho.entities.UserDTO(m.username, m.age)
+              FROM Member m
+            . 패키지 명을 포함한 전체 클래스 명 입력 필요
+            . 순서와 타입이 일치하는 생성자 필요
+
+

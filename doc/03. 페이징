@@ -1,0 +1,29 @@
+---------------------------------------
+   조인
+---------------------------------------
+    - 내부 조인
+        select
+            m
+        from            Member m
+        [inner] join    m.team t
+
+      ==> 회원과 연관 있는 팀을 JOIN
+
+    - 외부 조인
+        select
+            m
+        from                Member m
+        left [outer] join   m.team t
+
+    - 세타 조인
+        select
+            count(m)
+        from                Member m,
+                            Team   t
+        where m.username = t.name
+
+
+
+
+
+

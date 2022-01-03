@@ -1,0 +1,34 @@
+---------------------------------------
+   JPQL 기본 함수
+---------------------------------------
+    - CONCAT(string1, string2)
+    - SUBSTRING(string, start, end) : 1부터 시작
+    - LOCATE(string1, string2 [, start])
+    - LENGTH(string)
+    - LOWER(string)
+    - UPPER(string)
+    - TRIM([[LEADING|TRAILING|BOTH][char] FROM] string)
+
+    - CURRENT_DATE
+    - CURRENT_TIME
+    - CURRENT_TIMESTAMP
+
+    - INDEX(identification variable)
+    - SIZE(collection)
+    - MOD(number1, number2)
+    - SQRT(number)
+
+---------------------------------------
+   JPQL 사용자 정의 함수
+---------------------------------------
+    - 하이버네이트는 사용전 방언에 추가해야 한다.
+
+    - 사용하는 DB 반언을 상속받고, 사용자 정의 함수를 등록한다.
+
+        select function('group_oncat', i.name) from Item i
+
+    - 웬만한건 이미 Hibernate에서 등록되어 있음
+        H2Dialect,
+        SQLServer2016Dialect,
+        Oracle12cDialect,
+        MySQLDialect

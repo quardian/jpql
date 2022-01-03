@@ -32,7 +32,7 @@
 
             <!-- [튜닝] 10개 쿼리문 모았다가 한 번에 보냄 -->
             <property name="hibernate.jdbc.batch_size" value="10"/>
-            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <property name="hibernate.hbm2ddl.auto" value="none" />
         </properties>
 
     </persistence-unit>

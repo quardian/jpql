@@ -18,7 +18,7 @@ public class JpaMain
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try{
-            insert(em);
+            //insert(em);
             //pagings(em);
             join(em);
             tx.commit();
@@ -37,11 +37,13 @@ public class JpaMain
 
     public static void insert(EntityManager em)
     {
+        // 팀 생성
         Team teamA = Team.builder()
                 .name("member90")
                 .build();
         em.persist(teamA);
 
+        // 회원 생성
         for ( int i=0; i<100; i++)
         {
             Member memberA = Member.builder()
@@ -51,6 +53,26 @@ public class JpaMain
                     .build();
             em.persist(memberA);
         }
+
+        // 상품 생성
+        for ( int i=0; i<10; i++) {
+            Product product = Product.builder().name("prodouct" + i)
+                    .price(1000 + i)
+                    .stockAmount(10 + i).build();
+            em.persist(product);
+        }
+
+        // 주문 생성
+        Member findMember = em.find(Member.class, 1L);
+        Product findProduct = em.find(Product.class, 1L);
+
+        Order order = Order.builder()
+                .orderAmount(1000)
+                .product(findProduct)
+                .address(new Address("서울", "종로구", "15210"))
+                .build();
+        em.persist(order);
+
     }
 
     public static void pagings(EntityManager em)
@@ -72,6 +94,8 @@ public class JpaMain
             System.out.println("[page] = " + page);
             System.out.println("page.firstItem.get(0).getUsername() = " + list.get(0).getUsername());
         }
+
+
     }
 
     public static void join(EntityManager em)
@@ -80,14 +104,18 @@ public class JpaMain
         em.clear();
 
         // inner join
-        String qlString = " select m from Member m inner join Team t on m.username = t.name";
+        String qlString = " select m from Member m inner join m.team t where m.age > (select avg(m2.age) from Member m2 )";
         TypedQuery<Member> query = em.createQuery(qlString, Member.class);
         List<Member> members = query
                                 .getResultList();
 
         System.out.println("members = " + members.size());
 
-
+        StringBuilder sbQuery = new StringBuilder();
+        qlString = "select m from Member m where m.team = SOME (select t from Team t)";
+        query = em.createQuery(qlString, Member.class);
+        List<Member> resultList = query.getResultList();
+        System.out.println("resultList = " + resultList.size());
 
     }
 

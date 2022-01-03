@@ -1,0 +1,71 @@
+---------------------------------------
+   경로 표현식
+---------------------------------------
+
+    - .(점)을 찍어 객체 그래프를 탬색하는 것
+
+    select
+        m.username       --> 상태필드
+    from    Member   m
+    join    m.team   t   --> 단일값 연관필드
+    join    m.orders o   --> 컬렉션 값 연관필드
+    where t.name = '팀A'
+
+---------------------------------------
+   경로 표현식 용어 정리
+---------------------------------------
+    - 상태 필드(state field) : 단순히 값을 저장하기 위한 필드
+
+    - 연관 필드 : 연관관계를 위한 필드
+        . 단일값 연관 필드
+            @ManyToOne, @OneToOne, 대상이 엔터티 (ex: m.team)
+        . 컬렉션 값 연관 필드
+            @OneToMay, @ManyToMany, 대상이 컬렉션 (ex: m.orders)
+
+---------------------------------------
+   경로 표현식 특징
+---------------------------------------
+    - 상태필드 (state field)    : 경로 탐색의 끝
+
+    - 단일값 연관경로 : 묵시적 내부 조인(inner join)발생, 탐색 O
+
+        select m.team from Member m
+        select m.team.name from Member m
+
+    - 컬렉션값 연관 경로 : 묵시적 내부 조인 발생, 탐색X
+      . FROM 절에서 명시적 조인을 통해 별칭을 얻으면 별칭을 통해 탐색 가능
+
+        select t.members from team t
+
+        [] 탐색을 원할 때는 명시적 조인 사용
+            select
+                m.username
+            from        Team        t
+            inner join  t.members   m
+
+---------------------------------------
+   명시적, 묵시적 조인
+---------------------------------------
+
+    - 명시적 조인 : join 키워드 직접 사용
+
+        select m from Member m inner join m.team t
+
+    - 묵시적 조인 : 경로 표현식에 의해 묵시적으로 SQL 조인발생 (내부 조인만 가능)
+
+        select m.team from Member m
+
+        실무에서 묵시적 조인 사용하지 말것!!! - 튜닝 힘들어요~
+
+---------------------------------------
+   경로 표현식 - 예제
+---------------------------------------
+    - select o.member.team from Order o --> 성공
+        => Order 와 member 와 team 묵시적 조인 발생
+
+    - select t.members from Team t      --> 성공
+        ==> team과 member 묵시적 조인 발생
+
+    - select t.members.username from Team t --> 실패
+
+    - select m.username from Team t join t.members m --> 성공

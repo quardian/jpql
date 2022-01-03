@@ -1,0 +1,29 @@
+---------------------------------------
+   JPQL 타입 표현
+---------------------------------------
+    - 문자 : 'HELLO', 'She''s'
+    - 숫자 : 10L(Long), 10D(Double), 10F(Float)
+    - Boolean : TRUE, FALSE
+    - ENUM : com.inho.MemberType.Admin ( 패키지명 )
+    - 엔터티 타입 : TYPE(m) = Member ( 상속 관계에서 사용 )
+                ex) "select i from Item i where type(i) = Book"
+
+    예제)
+        String qlString = "select
+                                m.username, 10L, 'HELLO', TRUE from Member m
+                            where memberType = com.inho.MemberType.ADMIN ";
+
+---------------------------------------
+   JPQL 기타
+---------------------------------------
+    - SQL 과 문법이 같은 식
+    - EXISTS, IN
+    - AND, OR, NOT
+    - =, >, >=, <, <=, <>
+    - BETWEEN, LIKE, IS NULL
+
+    "select
+        m
+     from Member m
+     where m.age between 0 and 10
+        and m.username is not null"

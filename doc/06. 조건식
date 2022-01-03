@@ -1,0 +1,43 @@
+---------------------------------------
+   조건식 - CASE 식
+---------------------------------------
+
+    1. 기본 CASE 식
+
+        select
+            case
+                when m.age <= 10 then '학생요금'
+                when m.age >= 60 then '경로요금'
+                else '일반요금'
+            end
+        from Member m
+
+
+    2. 단순 CASE 식
+
+        select
+            case t.name
+                when 'teamA' then '인센티브110%'
+                when 'teamB' then '인센티브120%'
+                else '연봉삭감10%'
+            end
+        from Team t
+
+
+---------------------------------------
+   조건식 - CASE 식
+---------------------------------------
+    - COALESCE  : 하나씩 조회해서 null 이 아니면 반환
+    - NULLIF    : 두 값이 같으면 null 반환, 다르면 첫번째 값 반환
+
+    - 예) 사용자 이름이 없으면 '이름 없는 회원' 반환
+        select
+            coalesce(m.username, '이름 없는 회원')
+        from Member m
+
+    - 예) 사용자 이름이 '관리자'면 null 반환하고, 나머지는 본인 이름 반환
+        select
+            nullif(m.username,'관리자')
+        from Member m
+
+

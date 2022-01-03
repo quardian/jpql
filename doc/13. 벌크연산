@@ -1,0 +1,50 @@
+---------------------------------------
+  벌크 연산
+---------------------------------------
+    - 재고가 10개 미만인 모든 상품의 가격을 10% 상승 하려면?
+    - JPA 변경 감지 기능을 실행하려면 너무 많은 SQL 실행
+        . 1. 재고가 10개 미만인 상품 리스트를 조회한다.
+        . 2. 상품 엔터티의 가격을 10% 증가한다.
+        . 3. 트랜잭션 커밋 시점에 변경감지가 동작한다.
+    - 변겨된 데이터가 100건이라면 100번의 UPDATE SQL 실행
+
+
+
+---------------------------------------
+  벌크 연산 예제
+---------------------------------------
+    - 쿼리 한 번으로 여러 테이블 로우 변경 (엔터티)
+
+    - executeUpdate() 의 결과는 영향 받은 엔터티 수 반환
+    - UPDATE, DELETE 지원
+    . INSERT (insert into .. select, 하이버네이트 지원)
+
+    String qlString = "update Product p set p.price = p.price * 1.1 where p.stockAmount < :stockAmount";
+    int affected    = em.createQuery(qlString)
+                        .setParameter("stockAmount",10)
+                        .executeUpdate();
+
+---------------------------------------
+  벌크 연산 주의
+---------------------------------------
+    - 벌크 연산은 영속성 켄텍스트를 무시하고 데이터베이스에 직접 쿼리
+
+        - 벌크 연산을 먼저 실행
+          . 영속성 컨텍스가 없는 경우 다른 연산 보다 제일 먼저 실행
+
+        - 벌크 연산 수행 후 영속성 컨텍스트 초기화
+          . 기존에 영속성 컨텍스트가 유지되고 있는 경우
+
+        - 벌크 연산 수행 시, FLUSH는 자동으로 이루어 지고 쿼리 실행함
+          벌크 연산 수행 후, 영속성 컨텍스트 정합성 맞추기 위해
+          em.clear() 수행하여 영속성 컨텍스트를 초기화 한다.
+
+---------------------------------------
+  Spring Data JPA
+---------------------------------------
+    @Modifying
+    @Query("udpate Member m set m.age = :age where m.username :username ")
+    int setAgeByUsername(int age, String username)
+
+    - Spring Data JPA 에서 벌크연산을 지원을 위해
+      @Modyfying 어노테이션의 clearAutomatically 속성을 true로 설정한다.

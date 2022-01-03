@@ -1,0 +1,38 @@
+---------------------------------------
+  엔터티 직접 사용 - 기본키 값
+---------------------------------------
+    - JPQL 에서 엔터티를 직접 사용하면 SQL에서 해당 엔터티의 기본키 값을 사용
+
+    [JPQL]
+        select count(m.id) from Member m    // 엔터티의 아이디를 사용
+        select count(m) from Member m       // 엔터티를 직접 사용
+    [SQL]
+        select count(m.id) as cnt from Member m
+
+    - 엔터티를 파라미터로 전달
+        String jpql = "select m from Member m where m = :member";
+        List list = em.createQuery(jpql).setParameter("member", member)
+                        .getResultList();
+
+        String jpql = "select m from Member m where m = :memberId";
+        List list = em.createQuery(jpql).setParameter("memberId", memberId)
+                        .getResultList();
+        [SQL]
+        select m.* from Member m where m.id = ?
+
+---------------------------------------
+  엔터티 직접 사용 - 외래키 값
+---------------------------------------
+    - Team team = em.find(Team.class, 1L);
+      String qlString = "select m from Member m where m.team = :team";
+      List list = em.creteQeury(qlString)
+                        .setParameter("team", team)
+                        .getResultList();
+
+      String qlString = "select m from Member m where m.team.id = :teamId";
+      List list = em.creteQeury(qlString)
+                        .setParameter("teamId", teamId)
+                        .getResultList();
+
+    - 실행된 SQL
+        select m.* from Member m where m.team_id = ?

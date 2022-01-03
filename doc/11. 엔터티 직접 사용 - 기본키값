@@ -1,0 +1,28 @@
+---------------------------------------
+  다형성 쿼리 - TYPE
+---------------------------------------
+    Item
+        - Album
+        - Movie
+        - Book
+
+     - 조회 대상을 특정 자식으로 한정
+
+     [JPQL]
+        select i from Item i where tyep(i) IN (Book, Movie)
+     [SQL]
+        select i.* from i where i.DTYPE IN ('Book', 'Movie')
+
+---------------------------------------
+  다형성 쿼리 - TREAT
+---------------------------------------
+
+    - 자바의 타입 캐스팅과 유사
+    - 상속 구조에서 부모 타입을 특정 자식 타입으로 다룰 때 사용
+    - FROM, WHERE, SELECT (하이버네이트 지원) 사용
+
+    [JPQL]
+    select i from Item i where treat ( i as Book).author = 'kim'
+
+    [SQL] - Single Table 전략인 경우
+    select i.* from Item i where i.DTYPE = 'Book' and i.author = 'kim'
